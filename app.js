@@ -3,9 +3,9 @@ var Vector2 = require('vector2');
 var Settings = require('settings');
 var ajax = require('ajax');
 var main = new UI.Card({
-    //title: 'Nanga',
+    title: 'Nanga'
     //icon: 'images/menu_icon.png',
-    banner: 'images/menu_icon.png'
+    //banner: 'images/menu_icon.png'
     //subtitle: 'Hello World!',
     //body: '...'
 });
@@ -24,6 +24,10 @@ main.on('click', 'up', function (e) {
     var menu = new UI.Menu({
         sections: [{
             items: [{
+                title: 'Cig+1',
+                //icon: 'images/menu_icon.png',
+                subtitle: '...'
+            }, {
                 title: 'Phones',
                 icon: 'images/menu_icon.png',
                 subtitle: 'Can do Menus'
