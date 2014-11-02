@@ -2,6 +2,7 @@ var UI = require('ui');
 var Vector2 = require('vector2');
 var Settings = require('settings');
 var ajax = require('ajax');
+var options = {};
 var main = new UI.Card({
     title: 'Nanga'
     //icon: 'images/menu_icon.png',
@@ -11,13 +12,19 @@ var main = new UI.Card({
 });
 main.show();
 Settings.config(
-    {url: 'http://mallinanga.github.io/nanga-pebble'},
+    {url: 'http://mallinanga.github.io/nanga-pebble?' + encodeURIComponent(JSON.stringify(options))},
     function (e) {
         console.log('Opening configurable');
         //Settings.option('color', 'red');
     },
     function (e) {
         console.log('Closed configurable');
+        if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
+            options = JSON.parse(decodeURIComponent(e.response));
+            console.log("Options = " + JSON.stringify(options));
+        } else {
+            console.log("Cancelled");
+        }
     }
 );
 main.on('click', 'up', function (e) {
