@@ -25,6 +25,10 @@ var main = new UI.Menu({
             title: 'iR'
             //subtitle: 'Raspberry',
             //icon: 'images/menu_icon.png'
+        }, {
+            title: 'About this app',
+            //subtitle: 'Raspberry',
+            icon: 'images/menu_icon.png'
         }]
     }]
 });
@@ -34,8 +38,8 @@ main.on('select', function (e) {
     ajax({url: 'http://kul-phones.herokuapp.com/api/users/' + e.itemIndex, type: 'json'},
         function (data) {
             console.log(data.data.id);
-            console.log(data.data.first_name);
-            console.log(data.data.last_name);
+            console.log(data.data.first_name + ' ' + data.data.last_name);
+            e.item.subtitle(data.data.first_name + ' ' + data.data.last_name);
         });
 });
 main.show();
