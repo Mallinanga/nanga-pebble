@@ -1,2 +1,3 @@
 Nanga Pebble
 ============
+Configuration page
