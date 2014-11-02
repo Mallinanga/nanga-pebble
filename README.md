@@ -1,2 +1,2 @@
-nanga-pebble
+Nanga Pebble
 ============
