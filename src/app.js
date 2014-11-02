@@ -33,13 +33,14 @@ var main = new UI.Menu({
     }]
 });
 main.on('select', function (e) {
+    console.log(e);
+    console.log(JSON.stringify(e));
     console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
     console.log('The item is titled "' + e.item.title + '"');
     ajax({url: 'http://kul-phones.herokuapp.com/api/users/' + e.itemIndex, type: 'json'},
         function (data) {
-            console.log(data.data.id);
             console.log(data.data.first_name + ' ' + data.data.last_name);
-            main.item.subtitle(data.data.first_name + ' ' + data.data.last_name);
+            //main.item.subtitle(data.data.first_name + ' ' + data.data.last_name);
         });
 });
 main.show();
