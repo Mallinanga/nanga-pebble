@@ -1,5 +1,5 @@
 var UI = require('ui');
-var Vector2 = require('vector2');
+//var Vector2 = require('vector2');
 var settings = require('settings');
 var ajax = require('ajax');
 var options = {};
