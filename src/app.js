@@ -31,25 +31,25 @@ main.on('click', 'up', function (e) {
     var menu = new UI.Menu({
         sections: [{
             items: [{
-                title: 'Cig+1',
+                title: 'Cig+1'
                 //icon: 'images/menu_icon.png',
-                subtitle: '...'
+                //subtitle: '...'
             }, {
-                title: 'Phones',
-                icon: 'images/menu_icon.png',
-                subtitle: 'Can do Menus'
+                title: 'Phones'
+                //icon: 'images/menu_icon.png',
+                //subtitle: 'Can do Menus'
             }, {
-                title: 'Pi',
-                subtitle: 'Raspberry',
-                icon: 'images/menu_icon.png'
+                title: 'Pi'
+                //subtitle: 'Raspberry',
+                //icon: 'images/menu_icon.png'
             }, {
-                title: 'WeMo',
-                subtitle: 'Raspberry',
-                icon: 'images/menu_icon.png'
+                title: 'WeMo'
+                //subtitle: 'Raspberry',
+                //icon: 'images/menu_icon.png'
             }, {
-                title: 'iR',
-                subtitle: 'Raspberry',
-                icon: 'images/menu_icon.png'
+                title: 'iR'
+                //subtitle: 'Raspberry',
+                //icon: 'images/menu_icon.png'
             }]
         }]
     });
