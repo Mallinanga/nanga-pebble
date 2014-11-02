@@ -26,9 +26,9 @@ var main = new UI.Menu({
             //subtitle: 'Raspberry',
             //icon: 'images/menu_icon.png'
         }, {
-            title: 'About this app',
+            title: 'About'
             //subtitle: 'Raspberry',
-            icon: 'images/menu_icon.png'
+            //icon: 'images/menu_icon.png'
         }]
     }]
 });
@@ -39,7 +39,7 @@ main.on('select', function (e) {
         function (data) {
             console.log(data.data.id);
             console.log(data.data.first_name + ' ' + data.data.last_name);
-            e.item.subtitle(data.data.first_name + ' ' + data.data.last_name);
+            main.item.subtitle(data.data.first_name + ' ' + data.data.last_name);
         });
 });
 main.show();
