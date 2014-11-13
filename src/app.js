@@ -11,11 +11,14 @@ console.log('Data on start is: ' + JSON.stringify(data));
 var main = new UI.Menu({
     sections: [{
         items: [{
-            title: 'Cig+1'
+            title: 'Cig+1',
+            subtitle: 'Cig count: '
         }, {
-            title: 'Coffee+1'
+            title: 'Coffee+1',
+            subtitle: 'Coffee count: '
         }, {
-            title: 'WeMo'
+            title: 'WeMo',
+            subtitle: 'Status: '
         }, {
             title: 'About'
         }]
