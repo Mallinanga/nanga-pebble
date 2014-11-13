@@ -80,11 +80,13 @@ main.on('select', function (e) {
                     function (error) {
                         console.log('The ajax request failed: ' + error);
                         vibe.vibrate('double');
-                    });
+                    }
+                );
             },
             function (error) {
                 console.log('The ajax request failed: ' + error);
-            });
+            }
+        );
     }
     if (e.itemIndex === 2) {
         var wind = new UI.Window();
@@ -96,6 +98,15 @@ main.on('select', function (e) {
         });
         wind.add(textfield);
         wind.show();
+        ajax({url: 'http://192.168.1.76:8083/fhem\?cmd\=set%20PUSHOVERmsg%20msg%20%22Test%22\&XHR\=1'},
+            function (data) {
+                console.log(data);
+            },
+            function (error) {
+                console.log('The ajax request failed: ' + error);
+            }
+        );
+        vibe.vibrate('long');
     }
     if (e.itemIndex === 3) {
         var card = new UI.Card({
