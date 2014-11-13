@@ -1,138 +1,141 @@
 var UI = require('ui');
-//var Vector2 = require('vector2');
+var vector2 = require('vector2');
 var settings = require('settings');
 var ajax = require('ajax');
-var options = {};
+var vibe = require('ui/vibe');
+//var accel = require('ui/accel');
+var options = settings.option();
+console.log('Options on start are: ' + JSON.stringify(options));
+var data = settings.data();
+console.log('Data on start is: ' + JSON.stringify(data));
 var main = new UI.Menu({
     sections: [{
         items: [{
             title: 'Cig+1'
-            //icon: 'images/menu_icon.png',
-            //subtitle: '...'
         }, {
             title: 'Coffee+1'
-            //icon: 'images/menu_icon.png',
-            //subtitle: '...'
-        }, {
-            title: 'Phones'
-            //icon: 'images/menu_icon.png',
-            //subtitle: 'Can do Menus'
-        }, {
-            title: 'Pi'
-            //subtitle: 'Raspberry',
-            //icon: 'images/menu_icon.png'
         }, {
             title: 'WeMo'
-            //subtitle: 'Raspberry',
-            //icon: 'images/menu_icon.png'
-        }, {
-            title: 'iR'
-            //subtitle: 'Raspberry',
-            //icon: 'images/menu_icon.png'
         }, {
             title: 'About'
-            //subtitle: 'Raspberry',
-            //icon: 'images/menu_icon.png'
         }]
     }]
 });
 main.on('select', function (e) {
-    console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
-    console.log('The item is titled "' + e.item.title + '"');
-    ajax({url: 'http://kul-phones.herokuapp.com/api/users/' + e.itemIndex, type: 'json'},
-        function (data) {
-            console.log(data.data.first_name + ' ' + data.data.last_name);
+    //console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
+    //console.log('The item is titled "' + e.item.title + '"');
+    //ajax({url: 'http://kul-phones.herokuapp.com/api/users/' + e.itemIndex, type: 'json'}, function (data) { console.log(data.data.first_name + ' ' + data.data.last_name); });
+    if (e.itemIndex === 0) {
+        ajax({
+                url: 'https://api.numerousapp.com/v1/metrics/1157433433690900836',
+                type: 'json',
+                headers: {'Authorization': 'Basic ' + settings.option('numerous')}
+            },
+            function (data) {
+                //console.log('Current cig count: ' + data.value);
+                var current_cig = data.value;
+                ajax({
+                        url: 'https://api.numerousapp.com/v1/metrics/1157433433690900836/events',
+                        type: 'json',
+                        method: 'post',
+                        headers: {'Authorization': 'Basic ' + settings.option('numerous')},
+                        data: {'value': current_cig + 1}
+                    },
+                    function (data) {
+                        //console.log('New cig count: ' + data.value);
+                        vibe.vibrate('short');
+                    },
+                    function (error) {
+                        console.log('The ajax request failed: ' + error);
+                        vibe.vibrate('double');
+                    });
+            },
+            function (error) {
+                console.log('The ajax request failed: ' + error);
+            });
+    }
+    if (e.itemIndex === 1) {
+        ajax({
+                url: 'https://api.numerousapp.com/v1/metrics/4284148819664064131',
+                type: 'json',
+                headers: {'Authorization': 'Basic ' + settings.option('numerous')}
+            },
+            function (data) {
+                //console.log('Current coffee count: ' + data.value);
+                var current_coffee = data.value;
+                ajax({
+                        url: 'https://api.numerousapp.com/v1/metrics/4284148819664064131/events',
+                        type: 'json',
+                        method: 'post',
+                        headers: {'Authorization': 'Basic ' + settings.option('numerous')},
+                        data: {'value': current_coffee + 1}
+                    },
+                    function (data) {
+                        //console.log('New coffee count: ' + data.value);
+                        vibe.vibrate('short');
+                    },
+                    function (error) {
+                        console.log('The ajax request failed: ' + error);
+                        vibe.vibrate('double');
+                    });
+            },
+            function (error) {
+                console.log('The ajax request failed: ' + error);
+            });
+    }
+    if (e.itemIndex === 2) {
+        var wind = new UI.Window();
+        var textfield = new UI.Text({
+            position: new vector2(0, 50),
+            size: new vector2(144, 30),
+            text: 'Panos Paganis',
+            textAlign: 'center'
         });
+        wind.add(textfield);
+        wind.show();
+    }
+    if (e.itemIndex === 3) {
+        var card = new UI.Card({
+            scrollable: true
+        });
+        card.title('About');
+        //card.subtitle('...');
+        card.body('Press select button');
+        card.show();
+        card.on('click', function (e) {
+            card.subtitle('Button: ' + e.button);
+            ajax({url: 'http://kul-phones.herokuapp.com/api/users/1', type: 'json'},
+                function (data) {
+                    card.body(data.data.first_name + ' ' + data.data.last_name);
+                }
+            );
+        });
+    }
 });
 main.show();
 settings.config(
     {url: 'http://mallinanga.github.io/nanga-pebble?' + encodeURIComponent(JSON.stringify(options))},
+    //{url: 'http://mallinanga.github.io/nanga-pebble'},
     function (e) {
-        console.log('Opening configurable');
-        //Settings.option('color', 'red');
+        //console.log('Opening configurable');
+        options = settings.option();
+        console.log('Current options: ' + JSON.stringify(options));
     },
     function (e) {
-        console.log('Closed configurable');
+        //console.log('Closed configurable');
         if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
-            options = JSON.parse(decodeURIComponent(e.response));
-            console.log("Options = " + JSON.stringify(options));
-        } else {
-            console.log("Cancelled");
+            console.log('New options: ' + JSON.stringify(e.options));
+            options = e.options;
+            settings.option(options);
+            //options = JSON.parse(decodeURIComponent(e.response));
+            //console.log("New options = " + JSON.stringify(options));
+            //settings.option(JSON.stringify(options));
+            //} else {
+            //console.log("Cancelled");
         }
     }
 );
-//main.on('click', 'up', function (e) {
-//    var menu = new UI.Menu({
-//        sections: [{
-//            items: [{
-//                title: 'Cig+1'
-//                //icon: 'images/menu_icon.png',
-//                //subtitle: '...'
-//            }, {
-//                title: 'Phones'
-//                //icon: 'images/menu_icon.png',
-//                //subtitle: 'Can do Menus'
-//            }, {
-//                title: 'Pi'
-//                //subtitle: 'Raspberry',
-//                //icon: 'images/menu_icon.png'
-//            }, {
-//                title: 'WeMo'
-//                //subtitle: 'Raspberry',
-//                //icon: 'images/menu_icon.png'
-//            }, {
-//                title: 'iR'
-//                //subtitle: 'Raspberry',
-//                //icon: 'images/menu_icon.png'
-//            }]
-//        }]
-//    });
-//    menu.on('select', function (e) {
-//        console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
-//        console.log('The item is titled "' + e.item.title + '"');
-//        ajax({url: 'http://kul-phones.herokuapp.com/api/users/' + e.itemIndex, type: 'json'},
-//            function (data) {
-//                console.log(data.data.id);
-//                console.log(data.data.first_name);
-//                console.log(data.data.last_name);
-//            });
-//    });
-//    menu.show();
-//});
-//var main = new UI.Card({
-//    title: 'Nanga'
-//    //icon: 'images/menu_icon.png',
-//    //banner: 'images/menu_icon.png'
-//    //subtitle: 'Hello World!',
-//    //body: '...'
-//});
-//main.on('click', 'down', function (e) {
-//    var card = new UI.Card({
-//        scrollable: true
-//    });
-//    card.title('Status');
-//    //card.subtitle('');
-//    card.body('...');
-//    card.show();
-//    card.on('click', function (e) {
-//        card.title(e.button);
-//        ajax({url: 'http://api.theysaidso.com/qod.json', type: 'json'},
-//            function (data) {
-//                card.subtitle(data.contents.author);
-//                card.body(data.contents.quote);
-//            }
-//        );
-//    });
-//});
-//main.on('click', 'select', function (e) {
-//    var wind = new UI.Window();
-//    var textfield = new UI.Text({
-//        position: new Vector2(0, 50),
-//        size: new Vector2(144, 30),
-//        //font: 'roboto_21_condensed',
-//        text: 'Panos Paganis',
-//        textAlign: 'center'
-//    });
-//    wind.add(textfield);
-//    wind.show();
+//accel.init();
+//accel.peek(function (e) {
+//console.log('Current acceleration on axis are: X=' + e.accel.x + ' Y=' + e.accel.y + ' Z=' + e.accel.z);
 //});
