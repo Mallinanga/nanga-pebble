@@ -9,6 +9,10 @@ function saveOptions() {
     return options;
 }
 $().ready(function () {
+    $("section form").submit(function (e) {
+        "use strict";
+        e.preventDefault();
+    });
     $("#b-cancel").click(function () {
         document.location = "pebblejs://close";
     });
